@@ -95,8 +95,6 @@ async def reminder(ctx: commands.Context, *args):
                 await ctx.send("현재 시간 이후로 설정해주세요.")
                 return
 
-            await ctx.send(date_time.ctime())
-
             return
 
         if arguments.subcommand == "list":
