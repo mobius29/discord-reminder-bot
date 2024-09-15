@@ -1,10 +1,14 @@
 import re
+
 from argparse import Namespace
+from datetime import datetime
 from discord.ext import commands
 
-from .parser import set_parser
-from ....utils import set_timeout
+from reminder.config import NOTION_REMINDERS_DB_ID
+from reminder.notion import notion
+from reminder.utils import set_timeout
 
+from .parser import set_parser
 
 async def set_reminder(ctx: commands.Context, args: Namespace):
     if args._set_help:
@@ -48,4 +52,35 @@ async def set_reminder(ctx: commands.Context, args: Namespace):
 
         return
 
-    return
+
+    
+    re_date = re.compile("^(\\d{4}-\\d{2}-\\d{2})$")
+    date = args.date[0] if args.date is not None else datetime.now().strftime("%Y-%m-%d")
+    if not re_date.match(date):
+        await ctx.send("Invalid date format. Please use YYYY-MM-DD")
+        return
+
+
+    re_time = re.compile("^(\\d{2}:\\d{2})$")
+    time = args.time[0] if args.time is not None else "09:00"
+    if not re_time.match(time):
+        await ctx.send("Invalid time format. Please use HH:MM")
+        return
+
+    date_time = f"{date}T{time}:00.000+09:00"
+    
+    try:
+        await notion.pages.create(
+            **{
+                "parent": {"database_id": NOTION_REMINDERS_DB_ID},
+                "properties": {
+                    "메시지": {"title": [{"text": {"content": args.message[0]}}]},
+                    "날짜": {"date": {"start": date_time}},
+                    "생성자": {"rich_text": [{"text": {"content": ctx.author.display_name }}]},
+                },
+            }
+        )
+   
+    except Exception as e:
+        print(f"Error {str(e)}")
+

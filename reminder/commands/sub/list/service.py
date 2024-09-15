@@ -19,7 +19,7 @@ async def cmd_list(ctx: commands.Context, args: Namespace):
         properties = page["properties"]
         id = properties["ID"]["unique_id"]["number"]
         date = properties["날짜"]["date"]["start"]
-        creator = properties["생성자"]["created_by"]["name"]
+        creator = properties["생성자"]["rich_text"][0]["text"]["content"]
         message = properties["메시지"]["title"][0]["text"]["content"]
 
         date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%f%z")
