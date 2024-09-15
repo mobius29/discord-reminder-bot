@@ -1,4 +1,4 @@
-from .. import parser
+from ..parser import parser
 
 sub_parser = parser.add_subparsers(
     dest="subcommand",

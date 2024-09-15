@@ -5,6 +5,6 @@ parser.add_argument(
     "-h",
     "--help",
     action="store_true",
-    dest="_help",
-    help="도움말을 출력합니다.",
+    dest="help",
+    help="도움말을 출력합니다."
 )

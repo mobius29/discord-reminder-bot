@@ -1,4 +1,4 @@
-from .parser import sub_parser
+from ..parser import sub_parser
 
 set_parser = sub_parser.add_parser(
     "set",
