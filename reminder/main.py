@@ -10,10 +10,11 @@ from .constants import NO_ARGS
 @bot.command()
 async def reminder(ctx: commands.Context, *args):
     try:
+        args = list(args)
         if len(args) == 0:
             raise Exception(NO_ARGS)
 
-        await execute_reminder(ctx, list(args))
+        await execute_reminder(ctx, args)
 
     except Exception as e:
         await ctx.send(f"An error occurred: {str(e)}")
